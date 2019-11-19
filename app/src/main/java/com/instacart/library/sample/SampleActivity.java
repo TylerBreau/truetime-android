@@ -44,12 +44,13 @@ public class SampleActivity
         Date trueTime = TrueTime.now();
         Date deviceTime = new Date();
 
+        String pattern = "MMM dd, yyyy. HH:mm:ss z";
         timeGMT.setText(getString(R.string.tt_time_gmt,
-                                  _formatDate(trueTime, "yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone("GMT"))));
+                                  _formatDate(trueTime, pattern, TimeZone.getTimeZone("GMT"))));
         timePST.setText(getString(R.string.tt_time_pst,
-                                  _formatDate(trueTime, "yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone("GMT-07:00"))));
+                                  _formatDate(trueTime, pattern, TimeZone.getTimeZone("GMT-08:00"))));
         timeDeviceTime.setText(getString(R.string.tt_time_device,
-                                         _formatDate(deviceTime, "yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone("GMT-07:00"))));
+                                  _formatDate(deviceTime, pattern, TimeZone.getTimeZone("GMT-04:00"))));
     }
 
     private String _formatDate(Date date, String pattern, TimeZone timeZone) {

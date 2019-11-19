@@ -129,7 +129,7 @@ public class TrueTime {
         saveTrueTimeInfoToDisk();
     }
 
-    long[] requestTime(String ntpHost) throws IOException {
+    public long[] requestTime(String ntpHost) throws IOException {
         return SNTP_CLIENT.requestTime(ntpHost,
             _rootDelayMax,
             _rootDispersionMax,

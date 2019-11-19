@@ -9,6 +9,9 @@ import com.instacart.library.truetime.TrueTimeRx;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.Arrays;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableSingleObserver;
@@ -21,8 +24,8 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        initRxTrueTime();
-//        initTrueTime();
+//        initRxTrueTime();
+        initTrueTime();
     }
 
     /**
@@ -37,13 +40,35 @@ public class App extends Application {
 
         protected Void doInBackground(Void... params) {
             try {
+                Log.i(TAG, "Use normal truetime");
                 TrueTime.build()
                         //.withSharedPreferences(SampleActivity.this)
                         .withNtpHost("time.google.com")
-                        .withLoggingEnabled(false)
-                        .withSharedPreferencesCache(App.this)
-                        .withConnectionTimeout(3_1428)
+                        .withLoggingEnabled(true)
+//                        .withSharedPreferencesCache(App.this)
+//                        .withConnectionTimeout(3_1428)
                         .initialize();
+
+                new Timer().scheduleAtFixedRate(new TimerTask(){
+                    @Override
+                    public void run(){
+                        try {
+                            //public static final int RESPONSE_INDEX_ORIGINATE_TIME = 0;
+                            //public static final int RESPONSE_INDEX_RECEIVE_TIME = 1;
+                            //public static final int RESPONSE_INDEX_TRANSMIT_TIME = 2;
+                            //public static final int RESPONSE_INDEX_RESPONSE_TIME = 3;
+                            //public static final int RESPONSE_INDEX_ROOT_DELAY = 4;
+                            //public static final int RESPONSE_INDEX_DISPERSION = 5;
+                            //public static final int RESPONSE_INDEX_STRATUM = 6;
+                            //public static final int RESPONSE_INDEX_RESPONSE_TICKS = 7;
+                            //[1574173506881, 1574173507883, 1574173507883, 1574173506944, 0, 14, 1, 8565795]
+                            Log.i(TAG, "Getting new time: ".concat(Arrays.toString(TrueTime.build().requestTime("time.google.com"))));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Log.e(TAG, "Manual call of requestTime errored out.");
+                        }
+                    }
+                },0,5000);
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.e(TAG, "something went wrong when trying to initialize TrueTime", e);
